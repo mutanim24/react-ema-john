@@ -8,25 +8,31 @@ const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
     useEffect(() => {
-        fetch(' https://raw.githubusercontent.com/ProgrammingHero1/ema-john-resources/main/fakeData/products.json')
+        fetch('https://raw.githubusercontent.com/ProgrammingHero1/ema-john-resources/main/fakeData/products.json')
             .then(res => res.json())
             .then(data => setProducts(data))
     }, []);
 
     // to get data from local storage
-    useEffect(()=>{
+    useEffect(() => {
         const storedCart = getShoppingCart();
-        console.log(storedCart);
         // get id
-        for(const id in storedCart){
-            console.log(id)
-            // find which product, they are added in localStore
-            // const addedProduct = products.find(product => product.id ===);
-            // console.log(addedProduct)
+        for (const id in storedCart) {
+            const addedCart = products.find(product => product.id === id);
+            let savedCart = [];
+            // get quantity of the product
+            if (addedCart) {
+                const quantity = storedCart[id];
+                addedCart.quantity = quantity;
+                savedCart.push(addedCart);
+                // console.log(addedCart)
+            }
+            setCart(savedCart);
         }
-    }, []);
+
+    }, [products]);
     // add to cart function
-    const handleAddToCart = (product) =>{
+    const handleAddToCart = (product) => {
         // console.log(product)
         const newCart = [...cart, product]
         setCart(newCart)
